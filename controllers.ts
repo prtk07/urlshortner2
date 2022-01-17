@@ -24,3 +24,13 @@ export async function shortenURL(req: Request, res: Response, next: Function) {
   }
   return next();
 }
+
+export async function redirectURL(req: Request, res: Response) {
+  try {
+    const { ind } = req.params;
+    const redirectTo = await url.findOne({ index: ind }).then((res) => res.url);
+    res.redirect(redirectTo);
+  } catch (e) {
+    res.status(400).send({ message: "something went wrong" });
+  }
+}

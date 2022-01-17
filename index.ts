@@ -4,7 +4,7 @@ const bodyparser = require("body-parser");
 import { Error } from "mongoose";
 require("dotenv").config();
 import responseHandler from "./response";
-import { shortenURL } from "./controllers";
+import { shortenURL, redirectURL } from "./controllers";
 
 function mongooseConnection() {
   mongoose
@@ -28,6 +28,7 @@ const app = express()
 
 app.get("/", responseHandler);
 app.post("/url", shortenURL, responseHandler);
+app.get("/shorty/:ind", redirectURL);
 
 const port = process.env.PORT || 8080;
 
