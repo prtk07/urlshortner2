@@ -17,7 +17,7 @@ export async function shortenURL(req: Request, res: Response, next: Function) {
     });
 
     await newurl.save();
-    res.locals.data = { url: "localhost:8080/shorty/" + newurl.index };
+    res.locals.data = { url: `${process.env.ENDPOINT}/shorty/${newurl.index}` };
   } catch (e) {
     console.log(e);
     res.status(400).send({ message: "something went wrong" });

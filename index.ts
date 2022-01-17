@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const bodyparser = require("body-parser");
 import { Error } from "mongoose";
 require("dotenv").config();
-import responseHandler from "./response";
 import { shortenURL, redirectURL } from "./controllers";
+import { Request, Response } from "express";
 
 function mongooseConnection() {
   mongoose
@@ -24,10 +24,15 @@ mongooseConnection();
 
 const app = express()
   .use(bodyparser.json())
-  .use(bodyparser.urlencoded({ extended: true }));
+  .use(bodyparser.urlencoded({ extended: true }))
+  .set("view engine", "ejs");
 
-app.get("/", responseHandler);
-app.post("/url", shortenURL, responseHandler);
+app.get("/", (req: Request, res: Response) => {
+  res.render("home", { data: "" });
+});
+app.post("/url", shortenURL, (req: Request, res: Response) => {
+  res.render("home", { data: res.locals.data.url });
+});
 app.get("/shorty/:ind", redirectURL);
 
 const port = process.env.PORT || 8080;
