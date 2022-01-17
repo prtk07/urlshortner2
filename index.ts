@@ -1,8 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyparser = require("body-parser");
 import { Error } from "mongoose";
 require("dotenv").config();
 import responseHandler from "./response";
+import { shortenURL } from "./controllers";
 
 function mongooseConnection() {
   mongoose
@@ -20,8 +22,12 @@ function mongooseConnection() {
 }
 mongooseConnection();
 
-const app = express();
+const app = express()
+  .use(bodyparser.json())
+  .use(bodyparser.urlencoded({ extended: true }));
+
 app.get("/", responseHandler);
+app.post("/url", shortenURL, responseHandler);
 
 const port = process.env.PORT || 8080;
 
